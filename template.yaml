@@ -1,0 +1,19 @@
+---
+- name: Generate detailed host-specific configuration
+  hosts: webservers
+  gather_facts: true
+
+  tasks:
+    - name: Ensure config directory exists
+      file:
+        path: /etc/hostinfo
+        state: directory
+        mode: "0755"
+
+    - name: Generate detailed config file for each host
+      template:
+        src: templates/host_config.j2
+        dest: /etc/hostinfo/config_{{ inventory_hostname }}.conf
+        owner: root
+        group: root
+        mode: "0644"
